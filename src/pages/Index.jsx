@@ -1,4 +1,5 @@
-import { Box, Container, Flex, Heading, HStack, Image, Link, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { useState } from "react";
+import { Box, Container, Flex, Heading, HStack, Image, Input, Link, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { FaShoppingCart } from "react-icons/fa";
 
 const sampleProducts = [
@@ -33,6 +34,16 @@ const sampleProducts = [
 ];
 
 const Index = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredProducts = sampleProducts.filter((product) =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <Container maxW="container.xl" p={4}>
       <Flex as="nav" bg="gray.800" color="white" p={4} justifyContent="space-between" alignItems="center">
@@ -47,9 +58,15 @@ const Index = () => {
       </Flex>
 
       <Box as="section" mt={10}>
+        <Input
+          placeholder="Search for products..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          mb={6}
+        />
         <Heading as="h2" size="xl" mb={6} textAlign="center">Featured Products</Heading>
         <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={10}>
-          {sampleProducts.map(product => (
+          {filteredProducts.map(product => (
             <Box key={product.id} borderWidth="1px" borderRadius="lg" overflow="hidden">
               <Image src={product.image} alt={product.name} />
               <Box p={6}>
